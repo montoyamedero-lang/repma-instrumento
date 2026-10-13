@@ -111,7 +111,25 @@ if(paso>0)boton("← Anterior",()=>{paso--;mostrar()},true);
 let siguiente=document.createElement("button");
 siguiente.textContent=paso===23?"Ver resultados →":"Siguiente →";
 siguiente.disabled=respuestas[paso]===null;
-siguiente.onclick=()=>{paso++;mostrar()};
+siguiente.onclick=()=>{
+  paso++;
+  if(paso===8||paso===16){
+    const numero=Math.floor(paso/8)+1;
+    etapa.textContent="Transición a la línea "+numero+" de 3";
+    contenido.innerHTML="";
+    const titulo=document.createElement("h2");
+    titulo.textContent="Ahora evaluaremos la línea de investigación "+numero;
+    contenido.appendChild(titulo);
+    const nombre=document.createElement("h2");
+    nombre.textContent=lineas[numero-1];
+    nombre.style.cssText="font-size:clamp(28px,5vw,42px);color:#112d51;text-align:center;margin:35px 0;overflow-wrap:anywhere";
+    contenido.appendChild(nombre);
+    botones.innerHTML="";
+    boton("Comenzar esta línea →",mostrar);
+  }else{
+    mostrar();
+  }
+};
 botones.appendChild(siguiente);
 return;
 }
