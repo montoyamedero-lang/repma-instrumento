@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuestionario REPMA | Tesis Inteligente</title>
+<style>
+:root{--azul:#112d51;--naranja:#e77c24;--fondo:#f1f5fa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);font-family:Arial,sans-serif;color:var(--azul)}
+header{background:var(--azul);color:white;padding:20px;text-align:center}
+header h1{margin:0;font-size:25px}
+header p{margin:8px 0 0;font-size:14px}
+main{max-width:850px;margin:30px auto;padding:0 18px}
+.panel{background:white;border-radius:18px;padding:32px;box-shadow:0 8px 30px #112d5115}
+h2{font-size:27px;line-height:1.3}
+p{line-height:1.65}
+input[type=text]{width:100%;padding:15px;border:1px solid #bbc7d6;border-radius:9px;margin:8px 0;font-size:16px}
+button{background:var(--naranja);color:white;border:0;border-radius:10px;padding:15px 24px;font-size:16px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.secundario{background:#dce5ef;color:var(--azul)}
+.botones{display:flex;gap:12px;justify-content:space-between;margin-top:25px;flex-wrap:wrap}
+.progreso{height:9px;background:#dce5ef;border-radius:10px;overflow:hidden;margin:18px 0 28px}
+#barra{height:100%;width:0;background:var(--naranja);transition:width .3s}
+.opciones{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:25px}
+.opcion{border:2px solid #d6e0eb;border-radius:12px;padding:22px;text-align:center;cursor:pointer;font-size:20px;font-weight:bold}
+.opcion.activa{border-color:var(--naranja);background:#fff1e6}
+.etiqueta{color:#b25c15;font-weight:bold;font-size:14px;text-transform:uppercase}
+.resultado{background:var(--fondo);padding:20px;border-radius:12px;margin:15px 0;border-left:5px solid var(--naranja)}
+.aviso{background:#fff5e8;padding:15px;border-radius:10px}
+small{color:#52657b}
+@media(max-width:600px){.panel{padding:22px}.opciones{gap:10px}.opcion{padding:18px 8px}h2{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+<h1>TESIS INTELIGENTE</h1>
+<p>Metodología, análisis e IA para investigar mejor</p>
+</header>
+<main>
+<section class="panel">
+<div class="etiqueta" id="etapa">Instrumento REPMA</div>
+<div class="progreso"><div id="barra"></div></div>
+<div id="contenido"></div>
+<div class="botones" id="botones"></div>
+</section>
+</main>
+<script>
+const preguntas=[
+"¿Sentirías placer trabajando en esta línea?",
+"¿Crees que serás reconocido por los demás si culminas este trabajo?",
+"¿Te sientes seguro trabajando en esta línea?",
+"¿Crees que este trabajo constituye un reto en el cual triunfarás?",
+"¿Te sentirías alegre trabajando en esta línea?",
+"¿Algo te pudiera dar asco?",
+"¿Piensas que trabajar en esta línea te resultará agradable?",
+"¿Consideras que investigar en esta línea es coherente con tus valores personales y éticos?"
+];
+let lineas=["","",""],respuestas=Array(24).fill(null),paso=-1;
+const contenido=document.getElementById("contenido");
+const botones=document.getElementById("botones");
+const etapa=document.getElementById("etapa");
+const barra=document.getElementById("barra");
+function boton(texto,funcion,secundario=false){
+let b=document.createElement("button");
+b.textContent=texto;
+if(secundario)b.className="secundario";
+b.onclick=funcion;
+botones.appendChild(b);
+}
+function mostrar(){
+botones.innerHTML="";
+if(paso===-1){
+etapa.textContent="Preparación";
+barra.style.width="0%";
+contenido.innerHTML=`<h2>Descubre tus dos líneas de investigación ideales</h2>
+<p>Escribe las tres líneas que deseas comparar. Después responderás ocho preguntas sobre cada una.</p>
+<label>Línea de investigación 1<input type="text" id="l0" maxlength="180"></label>
+<label>Línea de investigación 2<input type="text" id="l1" maxlength="180"></label>
+<label>Línea de investigación 3<input type="text" id="l2" maxlength="180"></label>
+<p class="aviso">Responde con sinceridad. No existen respuestas correctas o incorrectas. Si hay empates que afectan la selección, podrás elegir entre las líneas empatadas.</p>`;
+lineas.forEach((x,i)=>document.getElementById("l"+i).value=x);
+boton("Comenzar evaluación →",()=>{
+let v=[0,1,2].map(i=>document.getElementById("l"+i).value.trim());
+if(v.some(x=>!x)){alert("Escribe las tres líneas de investigación.");return}
+if(new Set(v.map(x=>x.toLowerCase())).size!==3){alert("Las tres líneas deben ser diferentes.");return}
+lineas=v;paso=0;mostrar();
+});
+return;
+}
+if(paso<24){
+let l=Math.floor(paso/8),q=paso%8;
+etapa.textContent=`Línea ${l+1} de 3 · Pregunta ${q+1} de 8`;
+barra.style.width=(paso/24*100)+"%";
+contenido.innerHTML="";
+let e=document.createElement("div");e.className="etiqueta";e.textContent=lineas[l];contenido.appendChild(e);
+let h=document.createElement("h2");h.textContent=preguntas[q];contenido.appendChild(h);
+let p=document.createElement("p");p.textContent="Piensa exclusivamente en esta línea de investigación.";contenido.appendChild(p);
+let opciones=document.createElement("div");opciones.className="opciones";
+["SÍ","NO"].forEach((valor,i)=>{
+let o=document.createElement("div");o.className="opcion"+(respuestas[paso]===i?" activa":"");
+o.textContent=valor;o.setAttribute("role","button");o.tabIndex=0;
+let elegir=()=>{respuestas[paso]=i;mostrar()};
+o.onclick=elegir;
+o.onkeydown=ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();elegir()}};
+opciones.appendChild(o);
+});
+contenido.appendChild(opciones);
+if(paso>0)boton("← Anterior",()=>{paso--;mostrar()},true);
+let siguiente=document.createElement("button");
+siguiente.textContent=paso===23?"Ver resultados →":"Siguiente →";
+siguiente.disabled=respuestas[paso]===null;
+siguiente.onclick=()=>{paso++;mostrar()};
+botones.appendChild(siguiente);
+return;
+}
+mostrarResultados();
+}
+function mostrarResultados(){
+etapa.textContent="Resultados de tu evaluación";
+barra.style.width="100%";
+let puntos=lineas.map((_,l)=>preguntas.reduce((s,q,i)=>{
+let r=respuestas[l*8+i];
+return s+((i===5)?(r===1?1:0):(r===0?1:0));
+},0));
+let orden=[0,1,2].sort((a,b)=>puntos[b]-puntos[a]||a-b);
+let primero=orden[0],segundo=orden[1];
+contenido.innerHTML="<h2>Tus líneas de investigación</h2>";
+let p=document.createElement("p");
+p.textContent="Puntuaciones obtenidas (máximo 8 puntos por línea):";
+contenido.appendChild(p);
+lineas.forEach((nombre,i)=>{
+let d=document.createElement("div");d.className="resultado";
+d.textContent=nombre+" — "+puntos[i]+" / 8 puntos";
+contenido.appendChild(d);
+});
+let ganadores=[];
+function elegirPosicion(candidatos,titulo,alElegir){
+if(candidatos.length===1){alElegir(candidatos[0]);return}
+let h=document.createElement("h2");h.textContent=titulo;contenido.appendChild(h);
+let p=document.createElement("p");p.textContent="Estas líneas han empatado. Elige personalmente cuál prefieres.";contenido.appendChild(p);
+candidatos.forEach(i=>{
+let b=document.createElement("button");b.style.margin="6px";
+b.textContent=lineas[i];b.onclick=()=>alElegir(i);contenido.appendChild(b);
+});
+}
+function finalizar(){
+contenido.innerHTML="<h2>Estas son tus dos líneas seleccionadas</h2>";
+ganadores.forEach((i,n)=>{
+let d=document.createElement("div");d.className="resultado";
+let h=document.createElement("h2");h.textContent=(n===0?"Línea A: ":"Línea B: ")+lineas[i];
+let p=document.createElement("p");p.textContent="Puntuación: "+puntos[i]+" / 8";
+d.append(h,p);contenido.appendChild(d);
+});
+let aviso=document.createElement("p");aviso.className="aviso";
+aviso.textContent="Este resultado es una orientación basada en tus respuestas. La elección definitiva también debe considerar viabilidad, recursos y pertinencia académica.";
+contenido.appendChild(aviso);
+botones.innerHTML="";
+boton("Imprimir o guardar resultado",()=>window.print());
+boton("Realizar otra evaluación",()=>{paso=-1;respuestas.fill(null);mostrar()},true);
+}
+function elegirSegundo(){
+contenido.innerHTML="<h2>Selección de la segunda línea</h2>";
+let restantes=orden.filter(i=>i!==ganadores[0]);
+let mejor=puntos[restantes[0]];
+elegirPosicion(restantes.filter(i=>puntos[i]===mejor),"Empate para la segunda línea",i=>{
+ganadores.push(i);finalizar();
+});
+}
+contenido.innerHTML="<h2>Selección de la primera línea</h2>";
+let max=Math.max(...puntos);
+elegirPosicion(orden.filter(i=>puntos[i]===max),"Empate en la primera posición",i=>{
+ganadores.push(i);elegirSegundo();
+});
+botones.innerHTML="";
+boton("← Revisar respuestas",()=>{paso=23;mostrar()},true);
+}
+mostrar();
+</script>
+</body>
+</html>
