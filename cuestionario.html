@@ -31,6 +31,16 @@ button.secundario{background:#dce5ef;color:var(--azul)}
 .aviso{background:#fff5e8;padding:15px;border-radius:10px}
 small{color:#52657b}
 @media(max-width:600px){.panel{padding:22px}.opciones{gap:10px}.opcion{padding:18px 8px}h2{font-size:23px}}
+  @media print {
+  @page { size: A4; margin: 15mm; }
+  body { background: white !important; }
+  header { background: white !important; color: #112d51 !important; }
+  header h1 { color: #112d51 !important; }
+  header p { color: #555 !important; }
+  main { max-width: 100%; margin: 0 auto; padding: 0; }
+  .panel { box-shadow: none !important; padding: 15px !important; }
+  .botones, button { display: none !important; }
+}
 </style>
 </head>
 <body>
