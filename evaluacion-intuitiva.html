@@ -144,10 +144,32 @@ if(paso===-1){
 
   const instrucciones=elemento('div','aviso');
   instrucciones.innerHTML=`
-    <h2>¿Cómo realizar esta evaluación?</h2>
-    <p><strong>1. Observa las imágenes</strong> y elige la que más relacionas con cada línea de investigación.</p>
-    <p><strong>2. Selecciona la expresión emocional</strong> que mejor representa lo que sientes respecto a esa línea.</p>
-    <p><strong>3. Repite el procedimiento</strong> con la segunda línea de investigación.</p>
+    
+<h2>¿Cómo realizar esta evaluación?</h2>
+<div class="transicion-grid">
+  <div class="transicion-paso">
+    <span class="transicion-numero">1</span>
+    <div>
+      <strong>🖼️ Observa las imágenes</strong>
+      <p>Elige la que más relacionas con cada línea de investigación.</p>
+    </div>
+  </div>
+  <div class="transicion-paso">
+    <span class="transicion-numero">2</span>
+    <div>
+      <strong>😊 Selecciona la expresión emocional</strong>
+      <p>Elige la que mejor representa lo que sientes respecto a esa línea.</p>
+    </div>
+  </div>
+  <div class="transicion-paso">
+    <span class="transicion-numero">3</span>
+    <div>
+      <strong>☷ Repite el procedimiento</strong>
+      <p>Haz lo mismo con la segunda línea de investigación.</p>
+    </div>
+  </div>
+</div>
+  
   `;
   pantalla.append(instrucciones);
 
