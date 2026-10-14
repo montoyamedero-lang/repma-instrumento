@@ -34,7 +34,7 @@ button.accion{background:var(--azul);color:white;border:0;border-radius:10px;pad
 }
 
 .transicion-pasos {
-  background: #eaf3fb;
+background: #e7f1fa;
   border-radius: 14px;
   padding: 20px;
   margin: 20px 0;
@@ -91,6 +91,24 @@ button.accion{background:var(--azul);color:white;border:0;border-radius:10px;pad
   }
 }
 
+
+.ilustracion-intuicion {
+  float: right;
+  width: 230px;
+  max-width: 30%;
+  height: auto;
+  margin: 0 0 15px 25px;
+}
+
+@media (max-width: 640px) {
+  .ilustracion-intuicion {
+    float: none;
+    display: block;
+    max-width: 75%;
+    margin: 15px auto;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -135,6 +153,12 @@ if(paso===-1){
   const titulo=elemento('h2','',
     'Ahora vamos a explorar tu intuición');
   pantalla.append(titulo);
+
+const ilustracion = document.createElement('img');
+ilustracion.src = 'ilustracion-intuicion.png';
+ilustracion.alt = 'Ilustración de la intuición y las emociones';
+ilustracion.className = 'ilustracion-intuicion';
+pantalla.append(ilustracion);
 
   pantalla.append(elemento('p','',
     'Has identificado dos líneas de investigación que destacan según tus respuestas. En esta segunda fase queremos conocer qué sensaciones te producen cuando piensas en investigar sobre ellas.'));
