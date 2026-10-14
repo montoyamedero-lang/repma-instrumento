@@ -150,7 +150,7 @@ function opciones(tipo,indice){const items=tipo==='imagen'?imagenes:expresiones;
   foto.src=item.nombre.toLowerCase()+'.png';
   foto.alt=item.nombre;
   b.append(foto);
-}b.append(elemento('strong','',item.nombre));if(item.detalle)b.append(elemento('small','',item.detalle));b.onclick=()=>{elecciones[indice][tipo]=i;mostrar()};grid.append(b)});pantalla.append(grid)}
+} if(item.detalle) b.append(elemento('small','',item.detalle));b.onclick=()=>{elecciones[indice][tipo]=i;mostrar()};grid.append(b)});pantalla.append(grid)}
 function mostrar(){
 if(paso===-1){
   pantalla.replaceChildren();
