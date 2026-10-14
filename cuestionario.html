@@ -186,6 +186,10 @@ aviso.textContent="Este resultado es una orientación basada en tus respuestas. 
 contenido.appendChild(aviso);
 botones.innerHTML="";
 boton("Imprimir o guardar resultado",()=>window.print());
+boton("Continuar a la evaluación intuitiva",()=>{
+  const url="evaluacion-intuitiva.html?lineaA="+encodeURIComponent(lineas[ganadores[0]])+"&lineaB="+encodeURIComponent(lineas[ganadores[1]]);
+  window.location.href=url;
+});  
 boton("Realizar otra evaluación",()=>{paso=-1;respuestas.fill(null);mostrar()},true);
 }
 function elegirSegundo(){
