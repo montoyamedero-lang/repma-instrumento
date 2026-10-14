@@ -49,7 +49,7 @@ const imagenes=[
  {nombre:'Colaboración',url:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=650&q=80'},
  {nombre:'Horizontes',url:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=650&q=80'}
 ];
-let paso=0;
+let paso=-1;
 const elecciones=[{imagen:null,emocion:null},{imagen:null,emocion:null}];
 let definitiva=null;
 function elemento(tag,clase,texto){const e=document.createElement(tag);if(clase)e.className=clase;if(texto!==undefined)e.textContent=texto;return e}
@@ -57,6 +57,49 @@ function boton(texto,accion,secundaria=false){const b=elemento('button','accion'
 function encabezado(titulo,descripcion){pantalla.replaceChildren(elemento('h2','',titulo),elemento('p','sub',descripcion))}
 function opciones(tipo,indice){const items=tipo==='imagen'?imagenes:expresiones;const grid=elemento('div','grid');items.forEach((item,i)=>{const b=elemento('button','opcion'+(elecciones[indice][tipo]===i?' activa':''));b.type='button';b.setAttribute('aria-pressed',String(elecciones[indice][tipo]===i));if(tipo==='imagen'){const img=elemento('img');img.src=item.url;img.alt=item.nombre;img.loading='lazy';b.append(img)}else{b.append(elemento('span','emoji',item.emoji))}b.append(elemento('strong','',item.nombre));if(item.detalle)b.append(elemento('small','',item.detalle));b.onclick=()=>{elecciones[indice][tipo]=i;mostrar()};grid.append(b)});pantalla.append(grid)}
 function mostrar(){
+if(paso===-1){
+  pantalla.replaceChildren();
+
+  const titulo=elemento('h2','',
+    'Ahora vamos a explorar tu intuición');
+  pantalla.append(titulo);
+
+  pantalla.append(elemento('p','',
+    'Has identificado dos líneas de investigación que destacan según tus respuestas. En esta segunda fase queremos conocer qué sensaciones te producen cuando piensas en investigar sobre ellas.'));
+
+  pantalla.append(elemento('p','',
+    'Observarás imágenes y expresiones emocionales. Tus elecciones complementarán los resultados anteriores desde una perspectiva más intuitiva y personal.'));
+
+  const instrucciones=elemento('div','aviso');
+  instrucciones.innerHTML=`
+    <h2>¿Cómo realizar esta evaluación?</h2>
+    <p><strong>1. Observa las imágenes</strong> y elige la que más relacionas con cada línea de investigación.</p>
+    <p><strong>2. Selecciona la expresión emocional</strong> que mejor representa lo que sientes respecto a esa línea.</p>
+    <p><strong>3. Repite el procedimiento</strong> con la segunda línea de investigación.</p>
+  `;
+  pantalla.append(instrucciones);
+
+  const importante=elemento('div','aviso');
+  importante.innerHTML=`
+    <h3>Importante</h3>
+    <p>Esta evaluación es una herramienta de reflexión personal que complementa los resultados de la primera fase. No existen respuestas correctas ni incorrectas.</p>
+    <p>Una vez finalizada la evaluación intuitiva, realizaremos el <strong>análisis de viabilidad de las líneas de investigación seleccionadas</strong>, considerando los recursos disponibles, el acceso a la información, el tiempo requerido y su pertinencia académica.</p>
+    <p>Este análisis permitirá valorar cuál de las líneas ofrece mejores condiciones para desarrollar tu investigación.</p>
+  `;
+  pantalla.append(importante);
+
+  pantalla.append(elemento('p','',
+    'Responde de forma espontánea, sin intentar elegir lo que consideras académicamente más conveniente.'));
+
+  const acciones=elemento('div','acciones');
+  acciones.append(boton('Comenzar evaluación intuitiva →',()=>{
+    paso=0;
+    mostrar();
+  }));
+  pantalla.append(acciones);
+
+  return;
+}
  if(!lineas[0]||!lineas[1]){encabezado('Faltan las dos líneas de investigación','Esta fase debe abrirse desde los resultados del primer instrumento REPMA.');pantalla.append(elemento('p','aviso','Por ahora no se han recibido los nombres de las líneas A y B.'));pantalla.append(boton('Volver al cuestionario',()=>location.href='cuestionario.html'));return}
  if(paso<4){const indice=Math.floor(paso/2);const tipo=paso%2===0?'imagen':'emocion';encabezado('Línea '+(indice===0?'A':'B')+': '+lineas[indice],tipo==='imagen'?'Elige la imagen que más relacionas intuitivamente con esta línea.':'Selecciona la expresión que mejor representa lo que sientes al considerar esta línea.');opciones(tipo,indice);const acciones=elemento('div','acciones');if(paso>0)acciones.append(boton('← Volver',()=>{paso--;mostrar()},true));const siguiente=boton(paso===3?'Comparar mis elecciones →':'Continuar →',()=>{paso++;mostrar()});siguiente.disabled=elecciones[indice][tipo]===null;acciones.append(siguiente);pantalla.append(acciones);return}
  encabezado('Compara tus elecciones','Observa las imágenes y expresiones seleccionadas para cada línea. Decide con cuál te identificas más.');const comparacion=elemento('div','comparacion');elecciones.forEach((e,i)=>{const t=elemento('div','tarjeta'+(definitiva===i?' elegida':''));t.append(elemento('h3','',`Línea ${i===0?'A':'B'}: ${lineas[i]}`));const img=elemento('img');img.src=imagenes[e.imagen].url;img.alt=imagenes[e.imagen].nombre;t.append(img,elemento('p','',imagenes[e.imagen].nombre),elemento('div','emoji',expresiones[e.emocion].emoji),elemento('p','',expresiones[e.emocion].nombre+' · '+expresiones[e.emocion].detalle));const elegir=boton(definitiva===i?'✓ Línea elegida':'Elegir esta línea',()=>{definitiva=i;mostrar()});elegir.className+=' no-imprimir';t.append(elegir);comparacion.append(t)});pantalla.append(comparacion);
