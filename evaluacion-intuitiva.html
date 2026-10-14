@@ -30,7 +30,7 @@ button.accion{background:var(--azul);color:white;border:0;border-radius:10px;pad
 'use strict';
 // Las líneas se reciben en la URL como ?a=...&b=... desde el primer instrumento.
 const parametros=new URLSearchParams(location.search);
-const lineas=[(parametros.get('a')||'').trim(),(parametros.get('b')||'').trim()];
+const lineas=[(parametros.get('lineaA')||'').trim(),(parametros.get('lineaB')||'').trim()];
 const pantalla=document.getElementById('pantalla');
 const expresiones=[
  {nombre:'Entusiasmo',detalle:'Me ilusiona',emoji:'🤩'},
