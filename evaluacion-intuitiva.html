@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REPMA | Evaluación intuitiva</title>
+<style>
+:root{--azul:#112d51;--naranja:#e77c24;--fondo:#f1f5fa}
+*{box-sizing:border-box}body{margin:0;background:var(--fondo);color:var(--azul);font-family:Arial,sans-serif}
+header{background:var(--azul);color:white;text-align:center;padding:24px 16px}header h1{margin:0 0 8px;font-size:26px}header p{margin:0;font-size:14px}
+main{max-width:1000px;margin:26px auto;padding:0 16px}.panel{background:white;border-radius:18px;padding:26px;box-shadow:0 8px 25px #112d5118;margin-bottom:18px}
+h2{margin-top:0}.sub{color:#50617a;line-height:1.55}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.opcion{border:2px solid #d7e0ec;border-radius:12px;background:white;padding:10px;cursor:pointer;text-align:center;color:var(--azul);font:inherit}
+.opcion:hover,.opcion:focus-visible{border-color:var(--naranja)}.opcion.activa{border:3px solid var(--naranja);background:#fff8f1}
+.opcion img{width:100%;height:145px;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px}.opcion .emoji{font-size:48px;display:block;margin:6px 0}
+.opcion strong{display:block;margin:4px 0}.opcion small{color:#51617b}.acciones{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+button.accion{background:var(--azul);color:white;border:0;border-radius:10px;padding:13px 18px;font-size:15px;cursor:pointer}button.accion.secundaria{background:#e8eef5;color:var(--azul)}button.accion:disabled{opacity:.45;cursor:not-allowed}
+.comparacion{display:grid;grid-template-columns:1fr 1fr;gap:16px}.tarjeta{border:2px solid #d7e0ec;border-radius:14px;padding:16px;text-align:center}.tarjeta img{width:100%;max-height:220px;object-fit:cover;border-radius:10px}.tarjeta .emoji{font-size:60px;margin:10px}.tarjeta.elegida{border-color:var(--naranja)}
+.aviso{padding:12px;background:#fff7ed;border-radius:10px;color:#80501f}.oculto{display:none!important}
+@media(max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.comparacion{grid-template-columns:1fr}.panel{padding:17px}.opcion img{height:110px}}
+@media print{header{background:white;color:var(--azul)}body{background:white}.panel{box-shadow:none}.acciones,.no-imprimir{display:none!important}main{max-width:100%}}
+</style>
+</head>
+<body>
+<header><h1>TESIS INTELIGENTE</h1><p>REPMA · Segunda fase: evaluación intuitiva</p></header>
+<main>
+<section class="panel" id="pantalla"></section>
+</main>
+<script>
+'use strict';
+// Las líneas se reciben en la URL como ?a=...&b=... desde el primer instrumento.
+const parametros=new URLSearchParams(location.search);
+const lineas=[(parametros.get('a')||'').trim(),(parametros.get('b')||'').trim()];
+const pantalla=document.getElementById('pantalla');
+const expresiones=[
+ {nombre:'Entusiasmo',detalle:'Me ilusiona',emoji:'🤩'},
+ {nombre:'Agrado',detalle:'Me resulta agradable',emoji:'😊'},
+ {nombre:'Curiosidad',detalle:'Quiero explorarla',emoji:'🤔'},
+ {nombre:'Indiferencia',detalle:'No siento especial interés',emoji:'😐'},
+ {nombre:'Inquietud',detalle:'Me genera preocupación',emoji:'😟'},
+ {nombre:'Rechazo',detalle:'Me resulta incómoda',emoji:'😣'}
+];
+// Imágenes de ejemplo: sustituiremos estas seis por las imágenes definitivas aprobadas.
+const imagenes=[
+ {nombre:'Exploración',url:'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=650&q=80'},
+ {nombre:'Descubrimiento',url:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=650&q=80'},
+ {nombre:'Innovación',url:'https://images.unsplash.com/photo-1518770660439-4636190af475?w=650&q=80'},
+ {nombre:'Conocimiento',url:'https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=650&q=80'},
+ {nombre:'Colaboración',url:'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=650&q=80'},
+ {nombre:'Horizontes',url:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=650&q=80'}
+];
+let paso=0;
+const elecciones=[{imagen:null,emocion:null},{imagen:null,emocion:null}];
+let definitiva=null;
+function elemento(tag,clase,texto){const e=document.createElement(tag);if(clase)e.className=clase;if(texto!==undefined)e.textContent=texto;return e}
+function boton(texto,accion,secundaria=false){const b=elemento('button','accion'+(secundaria?' secundaria':''),texto);b.type='button';b.onclick=accion;return b}
+function encabezado(titulo,descripcion){pantalla.replaceChildren(elemento('h2','',titulo),elemento('p','sub',descripcion))}
+function opciones(tipo,indice){const items=tipo==='imagen'?imagenes:expresiones;const grid=elemento('div','grid');items.forEach((item,i)=>{const b=elemento('button','opcion'+(elecciones[indice][tipo]===i?' activa':''));b.type='button';b.setAttribute('aria-pressed',String(elecciones[indice][tipo]===i));if(tipo==='imagen'){const img=elemento('img');img.src=item.url;img.alt=item.nombre;img.loading='lazy';b.append(img)}else{b.append(elemento('span','emoji',item.emoji))}b.append(elemento('strong','',item.nombre));if(item.detalle)b.append(elemento('small','',item.detalle));b.onclick=()=>{elecciones[indice][tipo]=i;mostrar()};grid.append(b)});pantalla.append(grid)}
+function mostrar(){
+ if(!lineas[0]||!lineas[1]){encabezado('Faltan las dos líneas de investigación','Esta fase debe abrirse desde los resultados del primer instrumento REPMA.');pantalla.append(elemento('p','aviso','Por ahora no se han recibido los nombres de las líneas A y B.'));pantalla.append(boton('Volver al cuestionario',()=>location.href='cuestionario.html'));return}
+ if(paso<4){const indice=Math.floor(paso/2);const tipo=paso%2===0?'imagen':'emocion';encabezado('Línea '+(indice===0?'A':'B')+': '+lineas[indice],tipo==='imagen'?'Elige la imagen que más relacionas intuitivamente con esta línea.':'Selecciona la expresión que mejor representa lo que sientes al considerar esta línea.');opciones(tipo,indice);const acciones=elemento('div','acciones');if(paso>0)acciones.append(boton('← Volver',()=>{paso--;mostrar()},true));const siguiente=boton(paso===3?'Comparar mis elecciones →':'Continuar →',()=>{paso++;mostrar()});siguiente.disabled=elecciones[indice][tipo]===null;acciones.append(siguiente);pantalla.append(acciones);return}
+ encabezado('Compara tus elecciones','Observa las imágenes y expresiones seleccionadas para cada línea. Decide con cuál te identificas más.');const comparacion=elemento('div','comparacion');elecciones.forEach((e,i)=>{const t=elemento('div','tarjeta'+(definitiva===i?' elegida':''));t.append(elemento('h3','',`Línea ${i===0?'A':'B'}: ${lineas[i]}`));const img=elemento('img');img.src=imagenes[e.imagen].url;img.alt=imagenes[e.imagen].nombre;t.append(img,elemento('p','',imagenes[e.imagen].nombre),elemento('div','emoji',expresiones[e.emocion].emoji),elemento('p','',expresiones[e.emocion].nombre+' · '+expresiones[e.emocion].detalle));const elegir=boton(definitiva===i?'✓ Línea elegida':'Elegir esta línea',()=>{definitiva=i;mostrar()});elegir.className+=' no-imprimir';t.append(elegir);comparacion.append(t)});pantalla.append(comparacion);
+ if(definitiva!==null){pantalla.append(elemento('p','aviso','Tu elección definitiva es: '+lineas[definitiva]+'. Considera también la viabilidad y pertinencia académica.'))}
+ const acciones=elemento('div','acciones');acciones.append(boton('← Revisar elecciones',()=>{paso=3;mostrar()},true));if(definitiva!==null)acciones.append(boton('Imprimir o guardar PDF',()=>window.print()));pantalla.append(acciones)
+}
+mostrar();
+</script>
+</body>
+</html>
