@@ -145,7 +145,12 @@ let definitiva=null;
 function elemento(tag,clase,texto){const e=document.createElement(tag);if(clase)e.className=clase;if(texto!==undefined)e.textContent=texto;return e}
 function boton(texto,accion,secundaria=false){const b=elemento('button','accion'+(secundaria?' secundaria':''),texto);b.type='button';b.onclick=accion;return b}
 function encabezado(titulo,descripcion){pantalla.replaceChildren(elemento('h2','',titulo),elemento('p','sub',descripcion))}
-function opciones(tipo,indice){const items=tipo==='imagen'?imagenes:expresiones;const grid=elemento('div','grid');items.forEach((item,i)=>{const b=elemento('button','opcion'+(elecciones[indice][tipo]===i?' activa':''));b.type='button';b.setAttribute('aria-pressed',String(elecciones[indice][tipo]===i));if(tipo==='imagen'){const img=elemento('img');img.src=item.url;img.alt=item.nombre;img.loading='lazy';b.append(img)}else{b.append(elemento('span','emoji',item.emoji))}b.append(elemento('strong','',item.nombre));if(item.detalle)b.append(elemento('small','',item.detalle));b.onclick=()=>{elecciones[indice][tipo]=i;mostrar()};grid.append(b)});pantalla.append(grid)}
+function opciones(tipo,indice){const items=tipo==='imagen'?imagenes:expresiones;const grid=elemento('div','grid');items.forEach((item,i)=>{const b=elemento('button','opcion'+(elecciones[indice][tipo]===i?' activa':''));b.type='button';b.setAttribute('aria-pressed',String(elecciones[indice][tipo]===i));if(tipo==='imagen'){const img=elemento('img');img.src=item.url;img.alt=item.nombre;img.loading='lazy';b.append(img)}else{
+  const foto=elemento('img','emoji-foto');
+  foto.src=item.nombre.toLowerCase()+'.png';
+  foto.alt=item.nombre;
+  b.append(foto);
+}b.append(elemento('strong','',item.nombre));if(item.detalle)b.append(elemento('small','',item.detalle));b.onclick=()=>{elecciones[indice][tipo]=i;mostrar()};grid.append(b)});pantalla.append(grid)}
 function mostrar(){
 if(paso===-1){
   pantalla.replaceChildren();
