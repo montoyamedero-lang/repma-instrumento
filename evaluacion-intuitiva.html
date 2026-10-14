@@ -19,6 +19,78 @@ button.accion{background:var(--azul);color:white;border:0;border-radius:10px;pad
 .aviso{padding:12px;background:#fff7ed;border-radius:10px;color:#80501f}.oculto{display:none!important}
 @media(max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.comparacion{grid-template-columns:1fr}.panel{padding:17px}.opcion img{height:110px}}
 @media print{header{background:white;color:var(--azul)}body{background:white}.panel{box-shadow:none}.acciones,.no-imprimir{display:none!important}main{max-width:100%}}
+
+/* Diseño de la pantalla de transición REPMA */
+.transicion-titulo {
+  font-size: 28px;
+  color: #112d51;
+  margin-bottom: 14px;
+}
+
+.transicion-intro {
+  font-size: 17px;
+  line-height: 1.55;
+  color: #304866;
+}
+
+.transicion-pasos {
+  background: #eaf3fb;
+  border-radius: 14px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.transicion-pasos h2 {
+  margin: 0 0 18px;
+  color: #112d51;
+}
+
+.transicion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.transicion-paso {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.transicion-numero {
+  background: #e77c24;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+}
+
+.transicion-importante {
+  background: #fff5df;
+  border-left: 5px solid #f0b544;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin: 18px 0;
+  line-height: 1.5;
+}
+
+.transicion-importante h2 {
+  color: #112d51;
+  margin-top: 0;
+}
+
+@media (max-width: 640px) {
+  .transicion-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 </head>
 <body>
