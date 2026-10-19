@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -315,8 +316,8 @@ function mostrarTransicionRacional(){
  ].forEach(([tipo,titulo,detalle])=>{const t=elemento('div','repma-criterio');t.append(repmaIcono(tipo),elemento('strong','',titulo),elemento('small','',detalle));criterios.append(t)});caja.append(criterios);pantalla.append(caja);
  const acciones=elemento('div','acciones repma-acciones-racional');acciones.append(boton('← Volver a mi línea elegida',()=>{paso=5;mostrar()},true));
  const comenzar=boton('Comenzar evaluación racional →',()=>{const u=new URL('evaluacion-racional.html',location.href);u.searchParams.set('linea',lineas[definitiva]);location.href=u.href});comenzar.classList.add('repma-primario');
- comenzar.disabled=true;comenzar.title='Disponible cuando se desarrolle el tercer instrumento';acciones.append(comenzar);pantalla.append(acciones);
- pantalla.append(elemento('p','repma-aviso-futuro','Línea seleccionada: '+lineas[definitiva]+'. La evaluación racional estará disponible cuando se incorpore el tercer instrumento.'));
+ acciones.append(comenzar);pantalla.append(acciones);
+ pantalla.append(elemento('p','repma-aviso-futuro','Línea seleccionada: '+lineas[definitiva]+'. Pulsa el botón para comenzar la evaluación racional.'));
 }
 
 function mostrar(){
