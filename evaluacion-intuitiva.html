@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -214,6 +213,32 @@ body.repma-final .panel{background:#fff;border-radius:0 0 19px 19px}
 .repma-racional .repma-acciones-racional .repma-primario{border-radius:999px;background:#f36b14!important}
 .repma-racional .repma-acciones-racional .repma-primario:disabled{color:#fff;opacity:1;cursor:not-allowed}
 @media(max-width:680px){body.repma-final .panel{padding:22px 17px}.repma-final .repma-titulo-elegido{gap:10px}.repma-final .repma-marca-check{width:55px;height:55px;flex-basis:55px}.repma-racional .repma-criterios{grid-template-columns:repeat(2,minmax(0,1fr))}.repma-racional .repma-criterio:nth-child(2){border-right:0}.repma-racional .repma-criterio{border-bottom:1px solid #d7e0ec}.repma-racional .repma-criterio:nth-child(n+3){border-bottom:0}}
+
+/* Presentación visual de la transición a la fase racional. */
+.repma-racional .repma-presentacion-imagen{position:relative;width:100%;margin:auto}
+.repma-racional .repma-imagen-tercera{display:block;width:100%;height:auto;border-radius:14px}
+.repma-racional .repma-boton-sobre-imagen{position:absolute;left:10.7%;bottom:4.0%;width:78.7%;height:8.0%;border:0;border-radius:16px;background:transparent!important;color:transparent!important;font-size:0;cursor:pointer;box-shadow:none!important}
+.repma-racional .repma-boton-sobre-imagen:focus-visible{outline:4px solid #0e345b;outline-offset:3px}
+.repma-racional .repma-regresar-tercera{margin-top:10px}
+@media(max-width:680px){.repma-racional .repma-boton-sobre-imagen{border-radius:8px}}
+</style>
+
+<style>
+/* REPMA: ajuste fiel a la maqueta aprobada de transición a fase 3.
+   Solo se aplica a la pantalla racional; no afecta al cuestionario. */
+@media screen and (min-width: 760px) {
+ body.repma-final.repma-racional main { max-width: 930px; margin: 20px auto; }
+ .repma-racional .panel { padding: 25px 32px; }
+ .repma-racional .repma-titulo-racional { font-size: 38px; line-height: 1.08; margin-bottom: 13px; }
+ .repma-racional .repma-texto { font-size: 16px; line-height: 1.5; margin: 10px 0; }
+ .repma-racional .repma-banda-razon { padding: 12px 16px; margin: 13px 0; gap: 14px; }
+ .repma-racional .repma-banda-razon svg { width: 44px; height: 44px; flex: 0 0 44px; }
+ .repma-racional .repma-banda-razon strong { font-size: 15px; }
+ .repma-racional .repma-criterios { gap: 6px; }
+ .repma-racional .repma-criterio { padding: 9px; }
+ .repma-racional .repma-criterio svg { width: 36px; height: 36px; }
+ .repma-racional .repma-acciones-racional { margin-top: 14px; }
+}
 </style>
 </head>
 <body>
@@ -306,18 +331,24 @@ function mostrarConfirmacion(){
 }
 function mostrarTransicionRacional(){
  repmaModoFinal(true);pantalla.replaceChildren();
- const titulo=elemento('h2','repma-titulo-racional');titulo.append(document.createTextNode('Tercera fase:'),elemento('span','','evaluación racional'));pantalla.append(titulo);
- pantalla.append(elemento('p','repma-texto','Ya has explorado las emociones y las intuiciones que te genera tu línea de investigación y has seleccionado la que más se ajusta a ti.'));
- const banda=elemento('div','repma-banda-razon');const icono=repmaIcono('razon');const texto=elemento('div');const frase=elemento('strong');frase.append(document.createTextNode('Ahora dejaremos a un lado las emociones y las intuiciones, y utilizaremos '),elemento('b','','exclusivamente la razón.'));texto.append(frase);banda.append(icono,texto);pantalla.append(banda);
- pantalla.append(elemento('p','repma-texto','En esta tercera fase evaluarás, mediante criterios objetivos, la línea de investigación que seleccionaste en la fase anterior. El propósito es determinar su viabilidad y pertinencia académica.'));
- const caja=elemento('div','repma-caja-criterios');caja.append(elemento('h3','','Aspectos que analizarás'));
- const criterios=elemento('div','repma-criterios');[
- ['tiempo','Tiempo','Si cuentas con el tiempo necesario.'],['lugar','Lugar y delimitación','Si puedes desarrollar la investigación en el ámbito previsto.'],['recursos','Recursos','Si dispones de los recursos humanos, físicos y económicos necesarios.'],['capacidades','Capacidades','Si posees los conocimientos técnicos y metodológicos requeridos.']
- ].forEach(([tipo,titulo,detalle])=>{const t=elemento('div','repma-criterio');t.append(repmaIcono(tipo),elemento('strong','',titulo),elemento('small','',detalle));criterios.append(t)});caja.append(criterios);pantalla.append(caja);
- const acciones=elemento('div','acciones repma-acciones-racional');acciones.append(boton('← Volver a mi línea elegida',()=>{paso=5;mostrar()},true));
- const comenzar=boton('Comenzar evaluación racional →',()=>{const u=new URL('evaluacion-racional.html',location.href);u.searchParams.set('linea',lineas[definitiva]);location.href=u.href});comenzar.classList.add('repma-primario');
- acciones.append(comenzar);pantalla.append(acciones);
- pantalla.append(elemento('p','repma-aviso-futuro','Línea seleccionada: '+lineas[definitiva]+'. Pulsa el botón para comenzar la evaluación racional.'));
+ const figura=elemento('div','repma-presentacion-imagen');
+ const imagen=elemento('img','repma-imagen-tercera');
+ imagen.src='presentacion-tercera-fase.png';
+ imagen.alt='Tercera fase: evaluación racional. Explicación del análisis objetivo y cuatro criterios: tiempo, lugar y delimitación, recursos y capacidades.';
+ figura.append(imagen);
+ const comenzar=boton('Comenzar evaluación racional →',()=>{
+   const u=new URL('evaluacion-racional.html',location.href);
+   u.searchParams.set('linea',lineas[definitiva]);
+   location.href=u.href;
+ });
+ comenzar.classList.add('repma-boton-sobre-imagen');
+ comenzar.setAttribute('aria-label','Comenzar evaluación racional de '+lineas[definitiva]);
+ figura.append(comenzar);
+ pantalla.append(figura);
+ const info=elemento('p','repma-aviso-futuro','Línea seleccionada: '+lineas[definitiva]);
+ pantalla.append(info);
+ const volver=boton('← Volver a mi línea elegida',()=>{paso=5;mostrar()},true);
+ volver.classList.add('repma-regresar-tercera');pantalla.append(volver);
 }
 
 function mostrar(){

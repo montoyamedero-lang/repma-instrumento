@@ -67,7 +67,7 @@ const preguntas=[
 "¿Piensas que trabajar en esta línea te resultará agradable?",
 "¿Consideras que investigar en esta línea es coherente con tus valores personales y éticos?"
 ];
-let lineas=["","",""],respuestas=Array(24).fill(null),paso=-1;
+let lineas=["","",""],respuestas=Array(24).fill(null),paso=-1,mostrarIntroduccion=false;
 const contenido=document.getElementById("contenido");
 const botones=document.getElementById("botones");
 const etapa=document.getElementById("etapa");
@@ -95,8 +95,30 @@ boton("Comenzar evaluación →",()=>{
 let v=[0,1,2].map(i=>document.getElementById("l"+i).value.trim());
 if(v.some(x=>!x)){alert("Escribe las tres líneas de investigación.");return}
 if(new Set(v.map(x=>x.toLowerCase())).size!==3){alert("Las tres líneas deben ser diferentes.");return}
-lineas=v;paso=0;mostrar();
+lineas=v;paso=0;mostrarIntroduccion=true;mostrar();
 });
+return;
+}
+if(paso<24 && mostrarIntroduccion && paso%8===0){
+const l=Math.floor(paso/8);
+etapa.textContent=`Presentación · Línea ${l+1} de 3`;
+barra.style.width=(paso/24*100)+"%";
+contenido.innerHTML="";
+const subtitulo=document.createElement("p");
+subtitulo.className="etiqueta";
+subtitulo.textContent=`Evaluación ${l+1} de 3`;
+const titulo=document.createElement("h2");
+titulo.textContent="Comencemos con la evaluación de esta línea de investigación";
+const nombre=document.createElement("div");
+nombre.className="resultado";
+nombre.style.cssText="font-size:clamp(23px,3.5vw,34px);font-weight:bold;text-align:center;overflow-wrap:anywhere;padding:30px 20px";
+nombre.textContent=lineas[l];
+const nota=document.createElement("p");
+nota.textContent="Responderás ocho preguntas sobre esta línea. Piensa únicamente en ella al responder.";
+contenido.append(subtitulo,titulo,nombre,nota);
+if(l===0){boton("← Revisar las tres líneas",()=>{paso=-1;mostrarIntroduccion=false;mostrar()},true)}
+else{boton("← Volver a la pregunta anterior",()=>{paso--;mostrarIntroduccion=false;mostrar()},true)}
+boton("Continuar →",()=>{mostrarIntroduccion=false;mostrar()});
 return;
 }
 if(paso<24){
@@ -117,28 +139,18 @@ o.onkeydown=ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();elegir()
 opciones.appendChild(o);
 });
 contenido.appendChild(opciones);
-if(paso>0)boton("← Anterior",()=>{paso--;mostrar()},true);
+if(paso>0)boton("← Anterior",()=>{
+if(paso===8||paso===16){mostrarIntroduccion=true;}
+else{paso--;mostrarIntroduccion=false;}
+mostrar();
+},true);
 let siguiente=document.createElement("button");
 siguiente.textContent=paso===23?"Ver resultados →":"Siguiente →";
 siguiente.disabled=respuestas[paso]===null;
 siguiente.onclick=()=>{
-  paso++;
-  if(paso===8||paso===16){
-    const numero=Math.floor(paso/8)+1;
-    etapa.textContent="Transición a la línea "+numero+" de 3";
-    contenido.innerHTML="";
-    const titulo=document.createElement("h2");
-    titulo.textContent="Ahora evaluaremos la línea de investigación "+numero;
-    contenido.appendChild(titulo);
-    const nombre=document.createElement("h2");
-    nombre.textContent=lineas[numero-1];
-    nombre.style.cssText="font-size:clamp(28px,5vw,42px);color:#112d51;text-align:center;margin:35px 0;overflow-wrap:anywhere";
-    contenido.appendChild(nombre);
-    botones.innerHTML="";
-    boton("Comenzar esta línea →",mostrar);
-  }else{
-    mostrar();
-  }
+paso++;
+mostrarIntroduccion=(paso===8||paso===16);
+mostrar();
 };
 botones.appendChild(siguiente);
 return;
@@ -185,12 +197,14 @@ let aviso=document.createElement("p");aviso.className="aviso";
 aviso.textContent="Este resultado es una orientación basada en tus respuestas. La elección definitiva también debe considerar viabilidad, recursos y pertinencia académica.";
 contenido.appendChild(aviso);
 botones.innerHTML="";
+boton("Continuar a la evaluación intuitiva →",()=>{
+const url=new URL("evaluacion-intuitiva.html",window.location.href);
+url.searchParams.set("lineaA",lineas[ganadores[0]]);
+url.searchParams.set("lineaB",lineas[ganadores[1]]);
+window.location.href=url.href;
+});
 boton("Imprimir o guardar resultado",()=>window.print());
-boton("Continuar a la evaluación intuitiva",()=>{
-  const url="evaluacion-intuitiva.html?lineaA="+encodeURIComponent(lineas[ganadores[0]])+"&lineaB="+encodeURIComponent(lineas[ganadores[1]]);
-  window.location.href=url;
-});  
-boton("Realizar otra evaluación",()=>{paso=-1;respuestas.fill(null);mostrar()},true);
+boton("Realizar otra evaluación",()=>{paso=-1;mostrarIntroduccion=false;respuestas.fill(null);mostrar()},true);
 }
 function elegirSegundo(){
 contenido.innerHTML="<h2>Selección de la segunda línea</h2>";
@@ -205,8 +219,12 @@ let max=Math.max(...puntos);
 elegirPosicion(orden.filter(i=>puntos[i]===max),"Empate en la primera posición",i=>{
 ganadores.push(i);elegirSegundo();
 });
-botones.innerHTML="";
-boton("← Revisar respuestas",()=>{paso=23;mostrar()},true);
+// Mostrar «Revisar respuestas» solamente cuando hay un empate pendiente.
+// Si ya se han elegido las dos líneas, finalizar() conserva sus botones.
+if(ganadores.length < 2){
+  botones.innerHTML="";
+  boton("← Revisar respuestas",()=>{paso=23;mostrarIntroduccion=false;mostrar()},true);
+}
 }
 mostrar();
 </script>

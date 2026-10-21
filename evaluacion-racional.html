@@ -48,7 +48,55 @@ body:has(#informe.exito:not(.oculto)) main{max-width:1450px;margin:24px auto}
 @media(max-width:900px){#informe.exito .celebracion{padding-right:20px;padding-top:190px}#informe.exito .celebracion:after{width:100%;height:180px;bottom:auto;background-position:center 42%}#informe.exito .linea-celebracion{margin:20px 0 0}#informe.exito .logros{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:580px){#informe.exito{padding:18px}#informe.exito .celebracion{padding:165px 15px 20px}#informe.exito .celebracion:after{height:155px}#informe.exito .celebracion .medalla{width:60px;height:60px;font-size:36px}#informe.exito .logros{grid-template-columns:1fr}#informe.exito .logro{min-height:unset}}
 @media print{#informe.exito .celebracion:after{-webkit-print-color-adjust:exact;print-color-adjust:exact}#informe.exito .enlace-retorno{display:none}}
-</style></head><body>
+
+/* El resumen completo se incorpora solo al documento impreso/PDF. */
+.solo-impresion{display:none}
+@media print{
+  .solo-impresion{display:block!important;margin:18px 0;break-inside:avoid}
+  .solo-impresion h3{color:#112d51;margin:0 0 9px}
+  .solo-impresion table{width:100%;border-collapse:collapse;font-size:13px}
+  .solo-impresion th,.solo-impresion td{border:1px solid #c9d5e1;padding:8px;text-align:left}
+  .solo-impresion th{background:#eef3f8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .solo-impresion .resumen-conclusion{font-weight:bold;margin:12px 0}
+  #informe .enlace-retorno{display:none!important}
+  #informe .item{break-inside:avoid}
+  #informe .celebracion{break-inside:avoid}
+  @page{size:A4;margin:14mm}
+}
+</style>
+<style>
+@media print {
+  body:has(#informe.exito:not(.oculto)) { font-size: 10px !important; }
+  body:has(#informe.exito:not(.oculto)) header { padding: 0 0 5px !important; margin: 0 !important; }
+  body:has(#informe.exito:not(.oculto)) header h1 { font-size: 16px !important; margin: 0 0 2px !important; }
+  body:has(#informe.exito:not(.oculto)) header p { font-size: 9px !important; margin: 0 !important; }
+  body:has(#informe.exito:not(.oculto)) main { margin: 0 !important; padding: 0 !important; }
+  #informe.exito { padding: 4px !important; margin: 0 !important; border: 0 !important; box-shadow: none !important; }
+  #informe.exito .celebracion { min-height: 0 !important; padding: 8px 38% 8px 10px !important; margin-bottom: 7px !important; border-radius: 9px !important; }
+  #informe.exito .celebracion:after { width: 36% !important; }
+  #informe.exito .celebracion h2 { font-size: 19px !important; margin: 0 0 3px !important; }
+  #informe.exito .celebracion .medalla { width: 34px !important; height: 34px !important; font-size: 24px !important; margin: 0 0 3px !important; }
+  #informe.exito .celebracion .feliz { font-size: 10px !important; line-height: 1.3 !important; margin: 0 0 5px !important; }
+  #informe.exito .insignia { padding: 3px 7px !important; font-size: 10px !important; }
+  #informe.exito .linea-celebracion { padding: 5px 8px !important; margin: 6px 0 0 !important; }
+  #informe.exito .linea-celebracion small { font-size: 8px !important; margin-bottom: 2px !important; }
+  #informe.exito .linea-celebracion strong { font-size: 14px !important; }
+  #informe.exito .solo-impresion { margin: 6px 0 !important; }
+  #informe.exito .solo-impresion h3 { margin: 0 0 3px !important; font-size: 11px !important; }
+  #informe.exito .solo-impresion table { font-size: 9px !important; }
+  #informe.exito .solo-impresion th, #informe.exito .solo-impresion td { padding: 3px 5px !important; }
+  #informe.exito .solo-impresion .resumen-conclusion { margin: 4px 0 !important; }
+  #informe.exito .logros { gap: 5px !important; margin: 6px 0 !important; }
+  #informe.exito .logro { padding: 5px 7px !important; font-size: 10px !important; }
+  #informe.exito .logro .tick { width: 19px !important; height: 19px !important; }
+  #informe.exito .proximo { padding: 7px 10px !important; margin: 6px 0 !important; }
+  #informe.exito .proximo h3 { margin: 0 0 4px !important; font-size: 12px !important; }
+  #informe.exito .proximo p { margin: 3px 0 !important; font-size: 10px !important; line-height: 1.3 !important; }
+  #informe.exito .item { margin: 4px 0 !important; padding: 4px !important; }
+  @page { size: A4; margin: 9mm; }
+}
+</style>
+</head><body>
 <header><h1>TESIS INTELIGENTE · REPMA</h1><p>Metodología, análisis e IA para investigar mejor</p></header><main>
 <section id="intro" class="panel"><h2>Tercera fase: evaluación racional</h2><p class="sub">Has llegado a la etapa de análisis lógico y planificación. Examinarás cuatro condiciones prácticas para desarrollar tu línea de investigación.</p><p class="sub">Línea seleccionada en la evaluación intuitiva:</p><div id="linea-intro" class="linea"></div><p class="nota">Responde según tu situación actual. Una respuesta «No» no invalida automáticamente la línea: permitirá identificar lo que debes resolver.</p></section>
 <section id="formulario" class="panel"><h2>Evaluación de condiciones</h2><p class="sub">Contesta las cuatro preguntas. El informe aparecerá al finalizar.</p><form id="preguntas">
@@ -57,7 +105,7 @@ body:has(#informe.exito:not(.oculto)) main{max-width:1450px;margin:24px auto}
 <div class="criterio"><h3>3. Recursos</h3><p>¿Dispones de los recursos humanos, físicos y financieros necesarios para realizar la investigación?</p><div class="opciones"><label><input required type="radio" name="recursos" value="si"> Sí</label><label><input type="radio" name="recursos" value="no"> No</label></div></div>
 <div class="criterio"><h3>4. Capacidades investigativas</h3><p>¿Posees los conocimientos metodológicos o técnicos necesarios para abordar el trabajo?</p><div class="opciones"><label><input required type="radio" name="capacidades" value="si"> Sí</label><label><input type="radio" name="capacidades" value="no"> No</label></div></div>
 <div class="acciones"><button type="submit">Generar mi informe de viabilidad →</button><button type="button" class="sec" id="reiniciar">Comenzar una nueva evaluación</button></div><p class="nota" id="guardado" role="status">Las respuestas se guardan automáticamente en este navegador.</p></form></section>
-<section id="informe" class="panel oculto" aria-live="polite"><h2>Informe de viabilidad de la línea de investigación</h2><p class="sub">Línea evaluada:</p><div id="linea-informe" class="linea"></div><div id="resultado"></div><div id="detalle"></div><div class="enlace-retorno" id="regreso"><strong>¿Necesitas resolver alguna dificultad y volver más adelante?</strong><p>Guarda este informe en PDF y conserva el siguiente enlace. Te llevará directamente a las preguntas de la tercera etapa, sin repetir las fases anteriores.</p><a id="enlace-regreso" href="#">Volver a mi evaluación racional</a><p class="nota">En el mismo navegador se recuperan las respuestas guardadas. Desde otro dispositivo puedes importar tu respaldo.</p></div><p class="nota">Este informe es orientativo y se basa en las respuestas proporcionadas. No sustituye la revisión académica de la pertinencia y factibilidad del proyecto.</p><div id="acciones-informe" class="acciones"><button class="sec" type="button" id="revisar">← Revisar mis respuestas</button><button type="button" id="imprimir">Imprimir o guardar como PDF</button><button type="button" class="sec" id="respaldo">Descargar respaldo</button><label class="sec" style="display:inline-flex;align-items:center;cursor:pointer;background:#e8eef5;color:#112d51;border-radius:10px;padding:13px 20px;font-weight:bold">Importar respaldo<input type="file" id="importar" accept=".json,application/json" style="display:none"></label></div></section>
+<section id="informe" class="panel oculto" aria-live="polite"><h2>Informe de viabilidad de la línea de investigación</h2><p class="sub">Línea evaluada:</p><div id="linea-informe" class="linea"></div><div id="resultado"></div><div id="resumen-impresion" class="solo-impresion" aria-label="Resumen de respuestas"></div><div id="detalle"></div><div class="enlace-retorno" id="regreso"><strong>¿Necesitas resolver alguna dificultad y volver más adelante?</strong><p>Guarda este informe en PDF y conserva el siguiente enlace. Te llevará directamente a las preguntas de la tercera etapa, sin repetir las fases anteriores.</p><a id="enlace-regreso" href="#">Volver a mi evaluación racional</a><p class="nota">En el mismo navegador se recuperan las respuestas guardadas. Desde otro dispositivo puedes importar tu respaldo.</p></div><p class="nota">Este informe es orientativo y se basa en las respuestas proporcionadas. No sustituye la revisión académica de la pertinencia y factibilidad del proyecto.</p><div id="acciones-informe" class="acciones"><button class="sec" type="button" id="revisar">← Revisar mis respuestas</button><button type="button" id="imprimir">Imprimir o guardar como PDF</button><button type="button" class="sec" id="respaldo">Descargar respaldo</button><label class="sec" style="display:inline-flex;align-items:center;cursor:pointer;background:#e8eef5;color:#112d51;border-radius:10px;padding:13px 20px;font-weight:bold">Importar respaldo<input type="file" id="importar" accept=".json,application/json" style="display:none"></label></div></section>
 </main><footer>REPMA · TESIS INTELIGENTE</footer>
 <script>
 'use strict';
@@ -93,7 +141,20 @@ document.getElementById('preguntas').addEventListener('change',actualizarGuardad
 if(anterior&&(!lineaUrl||anterior.linea===lineaUrl)&&anterior.respuestas){for(const [clave,valor] of Object.entries(anterior.respuestas)){const el=document.querySelector(`input[name="${clave}"][value="${valor}"]`);if(el)el.checked=true}}
 document.getElementById('reiniciar').addEventListener('click',()=>{if(!confirm('¿Deseas borrar las respuestas guardadas de esta evaluación?'))return;document.getElementById('preguntas').reset();actualizarGuardado();window.scrollTo(0,0)});
 
-document.getElementById('preguntas').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const pendientes=criterios.filter(c=>fd.get(c.clave)==='no');const afirmativas=4-pendientes.length;const resultado=document.getElementById('resultado'),detalle=document.getElementById('detalle');resultado.replaceChildren();detalle.replaceChildren();const estado=document.createElement('div');estado.className='estado '+(pendientes.length?'alerta':'bien');const titulo=document.createElement('strong');titulo.textContent=pendientes.length?`${afirmativas} de 4 condiciones satisfechas. Tu línea requiere ajustes antes de continuar.`:'¡FELICIDADES! Las cuatro condiciones evaluadas están satisfechas.';estado.append(titulo);resultado.append(estado);if(!pendientes.length){
+document.getElementById('preguntas').addEventListener('submit',e=>{e.preventDefault();const fd=new FormData(e.currentTarget);const pendientes=criterios.filter(c=>fd.get(c.clave)==='no');const afirmativas=4-pendientes.length;
+const resumenImpresion=document.getElementById('resumen-impresion');
+resumenImpresion.replaceChildren();
+const encabezadoResumen=document.createElement('h3');encabezadoResumen.textContent='Resumen de las condiciones evaluadas';
+const tablaResumen=document.createElement('table');
+const cabecera=document.createElement('tr');
+for(const nombre of ['Condición','Respuesta','Estado']){const th=document.createElement('th');th.textContent=nombre;cabecera.append(th)}
+const thead=document.createElement('thead');thead.append(cabecera);tablaResumen.append(thead);
+const tbody=document.createElement('tbody');
+for(const c of criterios){const tr=document.createElement('tr');const respuesta=fd.get(c.clave);for(const valor of [c.titulo,respuesta==='si'?'Sí':'No',respuesta==='si'?'Satisfecha':'Requiere atención']){const td=document.createElement('td');td.textContent=valor;tr.append(td)}tbody.append(tr)}
+tablaResumen.append(tbody);
+const conclusionResumen=document.createElement('p');conclusionResumen.className='resumen-conclusion';conclusionResumen.textContent=`Resultado: ${afirmativas} de 4 condiciones satisfechas. ${pendientes.length?'Es necesario resolver los aspectos indicados antes de continuar.':'Las cuatro condiciones prácticas evaluadas están satisfechas.'}`;
+resumenImpresion.append(encabezadoResumen,tablaResumen,conclusionResumen);
+const resultado=document.getElementById('resultado'),detalle=document.getElementById('detalle');resultado.replaceChildren();detalle.replaceChildren();const estado=document.createElement('div');estado.className='estado '+(pendientes.length?'alerta':'bien');const titulo=document.createElement('strong');titulo.textContent=pendientes.length?`${afirmativas} de 4 condiciones satisfechas. Tu línea requiere ajustes antes de continuar.`:'¡FELICIDADES! Las cuatro condiciones evaluadas están satisfechas.';estado.append(titulo);resultado.append(estado);if(!pendientes.length){
   informe.classList.add('exito');
   resultado.replaceChildren();detalle.replaceChildren();
   const hero=document.createElement('div');hero.className='celebracion';
