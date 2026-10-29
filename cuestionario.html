@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,14 +22,14 @@ button.secundario{background:#dce5ef;color:var(--azul)}
 .botones{display:flex;gap:12px;justify-content:space-between;margin-top:25px;flex-wrap:wrap}
 .progreso{height:9px;background:#dce5ef;border-radius:10px;overflow:hidden;margin:18px 0 28px}
 #barra{height:100%;width:0;background:var(--naranja);transition:width .3s}
-.opciones{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:25px}
-.opcion{border:2px solid #d6e0eb;border-radius:12px;padding:22px;text-align:center;cursor:pointer;font-size:20px;font-weight:bold}
+.opciones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:25px}
+.opcion{border:2px solid #d6e0eb;border-radius:12px;padding:22px 8px;overflow-wrap:anywhere;text-align:center;cursor:pointer;font-size:20px;font-weight:bold}
 .opcion.activa{border-color:var(--naranja);background:#fff1e6}
 .etiqueta{color:#b25c15;font-weight:bold;font-size:14px;text-transform:uppercase}
 .resultado{background:var(--fondo);padding:20px;border-radius:12px;margin:15px 0;border-left:5px solid var(--naranja)}
 .aviso{background:#fff5e8;padding:15px;border-radius:10px}
 small{color:#52657b}
-@media(max-width:600px){.panel{padding:22px}.opciones{gap:10px}.opcion{padding:18px 8px}h2{font-size:23px}}
+@media(max-width:600px){.panel{padding:22px}.opciones{gap:10px}.opcion{padding:16px 4px;font-size:clamp(12px,3.3vw,16px)}h2{font-size:23px}}
   @media print {
   @page { size: A4; margin: 15mm; }
   body { background: white !important; }
@@ -130,7 +129,7 @@ let e=document.createElement("div");e.className="etiqueta";e.textContent=lineas[
 let h=document.createElement("h2");h.textContent=preguntas[q];contenido.appendChild(h);
 let p=document.createElement("p");p.textContent="Piensa exclusivamente en esta línea de investigación.";contenido.appendChild(p);
 let opciones=document.createElement("div");opciones.className="opciones";
-["SÍ","NO"].forEach((valor,i)=>{
+["SÍ","PARCIALMENTE","NO"].forEach((valor,i)=>{
 let o=document.createElement("div");o.className="opcion"+(respuestas[paso]===i?" activa":"");
 o.textContent=valor;o.setAttribute("role","button");o.tabIndex=0;
 let elegir=()=>{respuestas[paso]=i;mostrar()};
@@ -162,7 +161,7 @@ etapa.textContent="Resultados de tu evaluación";
 barra.style.width="100%";
 let puntos=lineas.map((_,l)=>preguntas.reduce((s,q,i)=>{
 let r=respuestas[l*8+i];
-return s+((i===5)?(r===1?1:0):(r===0?1:0));
+return s+((i===5)?[0,0.5,1][r]:[1,0.5,0][r]);
 },0));
 let orden=[0,1,2].sort((a,b)=>puntos[b]-puntos[a]||a-b);
 let primero=orden[0],segundo=orden[1];
